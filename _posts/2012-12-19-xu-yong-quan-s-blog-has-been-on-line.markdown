@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Welcome to Jekyll!"
+title:  "清泉古雾's Blog上线了"
 date:   2012-12-19 12:06:00
 categories: 前端 清泉古雾
 ---
