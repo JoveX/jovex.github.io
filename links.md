@@ -4,10 +4,5 @@ title: 友情链接
 permalink: /links/
 ---
 
-友情链接页面
-
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
-
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
-
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+<a href="http://isay.me" target="_blank" >自说ME话</a>  
+<a href="http://thepana.com" target="_blank" >Pana</a>
