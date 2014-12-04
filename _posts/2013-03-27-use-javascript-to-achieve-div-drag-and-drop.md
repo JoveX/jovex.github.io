@@ -2,7 +2,7 @@
 layout: post
 title:  "JavaScript实现div拖放功能"
 date:   2013-03-27 17:22:00
-categories: 拖放 Javascript
+categories: 拖放 JavaScript
 ---
 拖放已经成为当今非常流行的界面模式。越来越多的web应用都做成桌面的形式，那么少不了窗口拖放这一功能。
 

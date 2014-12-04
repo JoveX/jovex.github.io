@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "JavaScript如何清空数组"
-date:   2013-05-06 13:41:00
+date:   2013-05-06 13:41:30
 categories: JavaScript
 ---
 如何将JavaScript的数组清空，其实不用想，就几种方法。

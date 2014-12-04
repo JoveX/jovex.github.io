@@ -2,7 +2,7 @@
 layout: post
 title:  "使用socket.io和node.js实现浏览器和客户端的双向通信"
 date:   2013-04-10 05:10:00
-categories: Node.js socket.io WebSocket
+categories: Node.js socket.io
 ---
 WebSocket protocol 是HTML5一种新的协议(protocol)。它是实现了浏览器与服务器全双工通信(full-duplex)。
 

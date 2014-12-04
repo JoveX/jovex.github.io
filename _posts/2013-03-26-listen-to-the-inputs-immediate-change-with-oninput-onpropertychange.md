@@ -2,7 +2,7 @@
 layout: post
 title:  "监听输入框的即时变化oninput & onpropertychange"
 date:   2013-03-26 12:41:00
-categories: HTML5 oninput onpropertychange Javascript
+categories: HTML5 oninput onpropertychange JavaScript
 ---
 之前在做一个监听文本框的字符个数，对输入字数做限制的功能。
 

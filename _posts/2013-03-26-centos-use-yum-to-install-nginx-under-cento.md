@@ -2,7 +2,7 @@
 layout: post
 title:  "CentOS利用yum安装Nginx"
 date:   2013-03-26 10:55:00
-categories: Linux Nginx CentOS yum
+categories: CentOS Nginx yum
 ---
 因为CentOS没有默认的Nginx的源，所以需要启用REHL的附件包。
 

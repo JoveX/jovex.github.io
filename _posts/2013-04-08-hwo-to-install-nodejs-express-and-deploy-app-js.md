@@ -2,7 +2,7 @@
 layout: post
 title:  "nodejs : express的安装和app.js配置"
 date:   2013-04-08 01:18:00
-categories: ExpressJS Node.js
+categories: Express Node.js
 ---
 MVC可谓无人不知，无人不晓。它不但可以增强团队的协作，还可以容易的进行产品的维护和升级。本文将对nodejs的一个MVC开发框架express.js做一下简单的介绍。
 

@@ -2,7 +2,7 @@
 layout: post
 title:  "JavaScript字符串拼接技巧"
 date:   2013-03-27 04:38:00
-categories: Javascript
+categories: JavaScript
 ---
 前端工程师常常会将很长一段的html填充相应的数据后插入到页面上。
 

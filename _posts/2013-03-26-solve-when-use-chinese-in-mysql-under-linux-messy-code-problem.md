@@ -2,7 +2,7 @@
 layout: post
 title:  "MySQL在Linux下中文乱码问题解决"
 date:   2013-03-26 10:18:00
-categories: MySQL Linux 中文乱码
+categories: Linux MySQL 中文乱码
 ---
 为了学习，自己搭建了一个CentOS的服务器，利用yum源安装的MySQL，可是发现写入中文的时候数据库乱码。
 
