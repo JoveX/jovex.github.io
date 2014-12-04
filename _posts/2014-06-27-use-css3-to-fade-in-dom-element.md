@@ -7,7 +7,7 @@ categories: Html/Css css3
 现在很有web页面都需要实现淡入淡出的效果，那么现在可以使用CSS3动画属性@keyframes可实现这一特效。  
 
 首先定义淡入动画代码：  
-```css
+```
 @keyframes fade-in {
     0% {opacity: 0;}/*初始状态 透明度为0*/
     50% {opacity: 0;}/*过渡状态 透明度为0*/
@@ -20,7 +20,7 @@ categories: Html/Css css3
 }
 ```
 在需要有淡化效果的元素上加入如下属性：  
-```css
+```
 #wrapper {
     animation-name: fade-in; /*动画名称*/
     animation-duration: 3s; /*动画持续时间*/

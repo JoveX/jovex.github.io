@@ -7,7 +7,7 @@ categories: JavaScript CryptoJS AES
 最近在调用一个serve接口的时候需要先对数据进行加密后再传输，使用的是`AES/ECB/PKCS5Padding`，前端选择了CryptoJS，但第一次用此加密库踩了不少坑。  
 那么现在就将整个加密和解密的过程中踩过那些坑记录下来：  
 首先准备一份明文和秘钥：  
-```javascript
+```
 var plaintText = 'aaaaaaaaaaaaaaaa'; // 明文
 var keyStr = 'bbbbbbbbbbbbbbbb'; // 一般key为一个字符串
 ```
@@ -19,13 +19,13 @@ var keyStr = 'bbbbbbbbbbbbbbbb'; // 一般key为一个字符串
 由于Java就是按照128bit给的，但是由于是一个字符串，需要先在前端将其转为128bit的才行。  
 最开始以为使用`CryptoJS.enc.Hex.parse`就可以正确地将其转为128bit的key。但是不然...  
 经过多次尝试，需要使用`CryptoJS.enc.Utf8.parse`方法才可以将key转为128bit的。好吧，既然说了是多次尝试，那么就不知道原因了，后期再对其进行更深入的研究。  
-```javascript
+```
 // 字符串类型的key用之前需要用uft8先parse一下才能用
 var key = CryptoJS.enc.Utf8.parse(keyStr);
 ```
 
 由于后端使用的是`PKCS5Padding`，但是在使用CryptoJS的时候发现根本没有这个偏移，查询后发现`PKCS5Padding`和`PKCS7Padding`是一样的东东，使用时默认就是按照`PKCS7Padding`进行偏移的。
-```javascript
+```
 // 加密
 var encryptedData = CryptoJS.AES.encrypt(plaintText, key, {
     mode: CryptoJS.mode.ECB,
@@ -34,7 +34,7 @@ var encryptedData = CryptoJS.AES.encrypt(plaintText, key, {
 ```
 
 由于CryptoJS生成的密文是一个对象，如果直接将其转为字符串是一个Base64编码过的，在`encryptedData.ciphertext`上的属性转为字符串才是后端需要的格式。
-```javascript
+```
 var encryptedBase64Str = encryptedData.toString();
 // 输出：'RJcecVhTqCHHnlibzTypzuDvG8kjWC+ot8JuxWVdLgY='
 console.log(encryptedBase64Str);
@@ -47,7 +47,7 @@ console.log(encryptedStr);
 
 由于加密后的密文为128位的字符串，那么解密时，需要将其转为Base64编码的格式。  
 那么就需要先使用方法`CryptoJS.enc.Hex.parse`转为十六进制，再使用`CryptoJS.enc.Base64.stringify`将其变为Base64编码的字符串，此时才可以传入`CryptoJS.AES.decrypt`方法中对其进行解密。  
-```javascript
+```
 // 拿到字符串类型的密文需要先将其用Hex方法parse一下
 var encryptedHexStr = CryptoJS.enc.Hex.parse(encryptedStr);
 
@@ -57,7 +57,7 @@ var encryptedBase64Str = CryptoJS.enc.Base64.stringify(encryptedHexStr);
 ```
 
 使用转为Base64编码后的字符串即可传入`CryptoJS.AES.decrypt`方法中进行解密操作。
-```javascript
+```
 // 解密
 var decryptedData = CryptoJS.AES.decrypt(encryptedBase64Str, key, {
     mode: CryptoJS.mode.ECB,
@@ -66,7 +66,7 @@ var decryptedData = CryptoJS.AES.decrypt(encryptedBase64Str, key, {
 ```
 
 经过CryptoJS解密后，依然是一个对象，将其变成明文就需要按照Utf8格式转为字符串。  
-```javascript
+```
 // 解密后，需要按照Utf8的方式将明文转位字符串
 var decryptedStr = decryptedData.toString(CryptoJS.enc.Utf8);
 console.log(decryptedStr); // 'aaaaaaaaaaaaaaaa'
