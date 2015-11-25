@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+    #container {width: 100%;height: 700px;margin:0;font-family:"微软雅黑";}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GlxAr5EKuk4YdhqfveZLE3fV"></script>
+    <title>地图展示</title>
+</head>
+<body>
+    <div id="container"></div>
+    <input type="text" name="keywords" value="美食" id="keywords">
+    &nbsp;
+    <input type="button" id="search" value="搜索">
+
+
+
+    <table border="1">
+        <tbody id="tbody">
+            <tr>
+                <td>1</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+<script type="text/javascript">
+    var map = new BMap.Map("container");
+
+    map.centerAndZoom(new BMap.Point(116.456935, 39.955712), 18);
+    
+    map.enableScrollWheelZoom(false);
+    map.enableDragging();
+
+    map.addControl(new BMap.ScaleControl());
+    map.addControl(new BMap.NavigationControl());
+    
+    var drag_marker_one = new BMap.Marker(new BMap.Point(116.456935, 39.955712), {
+        enableDragging: true,
+        enableMassClear: false
+    });
+    map.addOverlay(drag_marker_one);
+
+    drag_marker_one.addEventListener('dragging', function() {
+        console.log('dragging');
+        repaint_area();
+    });
+
+    drag_marker_one.addEventListener('dragend', function() {
+        console.log('dragend');
+        repaint_area();
+
+        search(get_keywords(), function (data) {
+            paint_page(data);
+        }, 100);
+    });
+    
+    var drag_marker_two = new BMap.Marker(new BMap.Point(116.457935, 39.956712), {
+        enableDragging: true,
+        enableMassClear: false
+    });
+    map.addOverlay(drag_marker_two);
+
+    drag_marker_two.addEventListener('dragging', function() {
+        console.log('dragging');
+        repaint_area();
+    });
+
+    drag_marker_two.addEventListener('dragend', function() {
+        console.log('dragend');
+        repaint_area();
+
+        search(get_keywords(), function (data) {
+            paint_page(data);
+        }, 100);
+    });
+
+
+    var polygon = new BMap.Polygon([
+    ], {
+        strokeColor: 'blue',
+        strokeWeight: 2,
+        strokeOpacity: 0.5,
+        enableMassClear: false
+    });
+    repaint_area();
+    map.addOverlay(polygon);
+
+    function repaint_area () {
+        var marker_one_pos = drag_marker_one.getPosition();
+        var lat_one = marker_one_pos.lat;
+        var lon_one = marker_one_pos.lng;
+        var marker_two_pos = drag_marker_two.getPosition();
+        var lat_two = marker_two_pos.lat;
+        var lon_two = marker_two_pos.lng;
+
+        if (lat_one > lat_two) {
+            var tmp_lat = lat_one;
+            lat_one = lat_two;
+            lat_two = tmp_lat;
+        }
+
+        if (lon_one > lon_two) {
+            var tmp_lon = lon_one;
+            lon_one = lon_two;
+            lon_two = tmp_lon;
+        }
+
+        polygon.setPath([
+            new BMap.Point(lon_one, lat_one),
+            new BMap.Point(lon_one, lat_two),
+            new BMap.Point(lon_two, lat_two),
+            new BMap.Point(lon_two, lat_one),
+        ]);
+    }
+
+    function get_keywords () {
+        return document.getElementById('keywords').value;
+    }
+
+    function paint_page (data) {
+        console.log(data);
+        var html = '';
+        var tbody = document.getElementById('tbody');
+        // tbody.innerHTML = '';
+        if (data.length < 1) {
+            tbody.innerHTML = '<tr><td>无数据</td></tr>';
+        }
+        data.forEach(function (item, index) {
+            html += ['<tr>',
+                '<td>' + (index + 1) + '</td>',
+                '<td>' + item.name + '</td>',
+                '<td>' + item.address + '</td>',
+                '<td>' + item.tel + '</td>',
+                '<td>' + item.tags + '</td>',
+            '</tr>'].join('');
+        });
+        tbody.innerHTML = html;
+
+        data.forEach(function (item) {
+            console.log(item);
+            var point = new BMap.Point(item.pos.lon, item.pos.lat);
+            var label = new BMap.Label(item.name, {
+                position: point
+            });
+            label.setTitle(item.name);
+            map.addOverlay(label);
+        });
+    }
+
+    function clear_map () {
+        var tbody = document.getElementById('tbody');
+        tbody.innerHTML = '<tr><td>搜索中....</td></tr>';
+        map.clearOverlays();
+    }
+
+
+    document.getElementById('search').addEventListener('click', function() {
+        search(get_keywords(), function (data) {
+            paint_page(data);
+        }, 1);
+    });
+
+    search(get_keywords(), function (data) {
+        paint_page(data);
+    }, 100);
+
+
+    function search(keywords, callback, page_size) {
+        clear_map();
+        var page_num = 1;
+        var list = [];
+        var options = {
+            pageCapacity: page_size,
+            renderOptions: {
+                // map: map,
+                // autoViewport: false,
+                // enableMessage:false,
+                // enableDetail:false
+            },
+            onSearchComplete: function(results) {
+                // console.log(results);
+                if (local.getStatus() == BMAP_STATUS_SUCCESS) {
+                    var s = [];
+                    for (var i = 0; i < results.getCurrentNumPois(); i++) {
+                        var poi = results.getPoi(i);
+                        // console.log(poi);
+                        list.push({
+                            name: poi.title,
+                            address: poi.address,
+                            pos: {
+                                lon: poi.point.lng,
+                                lat: poi.point.lat
+                            },
+                            tel: poi.phoneNumber || '',
+                            tags: poi.tags ? poi.tags.join(',') : ''
+                        });
+                    }
+                    search_continue(local, ++page_num);
+                } else {
+                    callback(list);
+                }
+            }
+        };
+        var local = new BMap.LocalSearch(map, options);
+        local.searchInBounds(keywords, polygon.getBounds());
+    }
+
+    function search_continue (local, page_num) {
+        local.gotoPage(page_num);
+    }
+</script>
+</html>
+
