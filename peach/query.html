@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>query</title>
+    <style type="text/css">
+        .main {
+            -webkit-box-orient: horizontal;
+            -moz-box-orient: horizontal;
+            box-orient: horizontal;
+            display: -webkit-box;
+            display: -moz-box;
+            display: box;
+
+            position: absolute;
+            top: 40px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .main > iframe {
+            -webkit-box-flex: 1;
+            -moz-box-flex: 1;
+            box-flex: 1;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<form action="" class="J_form">
+    <label>
+        <input type="radio" name="platform" value="pc">
+        PC
+    </label>
+    <label>
+        <input type="radio" name="platform" value="mobile">
+        MOBILE
+    </label>
+    &nbsp;
+    <input type="text" name="keywords" autocomplete="off">
+    <input type="submit" value="搜索">
+</form>
+<div class="main J_iframe">
+</div>
+<script type="text/javascript" src="zepto.min.js"></script>
+<script type="text/javascript">
+
+    var searchEngineList = [
+        {
+            name: 'le',
+            label: '乐视',
+            pc: {
+                url: 'http://so.le.com/s?wd=',
+                defaultUrl: 'http://so.le.com/'
+            },
+            mobile: {
+                url: 'http://m.le.com/search?wd=',
+                defaultUrl: 'http://m.le.com/search'
+            }
+        },
+        {
+            name: 'iqiyi',
+            label: '爱奇艺',
+            pc: {
+                url: 'http://so.iqiyi.com/so/q_',
+                defaultUrl: 'http://so.iqiyi.com/'
+            },
+            mobile: {
+                url: 'http://m.iqiyi.com/search.html?key=',
+                defaultUrl: 'http://m.iqiyi.com/'
+            }
+        },
+        {
+            name: 'baidu',
+            label: '百度',
+            pc: {
+                url: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+                defaultUrl: 'https://www.baidu.com/'
+            },
+            mobile: {
+                url: 'https://m.baidu.com/s?word=',
+                defaultUrl: 'https://www.baidu.com/'
+            }
+        },
+    ];
+
+    var params = getArgs();
+
+    // 检索平台
+    var platform = params.platform || 'pc';
+    $('input[name=platform][value=' + platform + ']').attr('checked', 'checked');
+
+    searchEngineList.forEach(function(item) {
+        // 搜索引擎选择框
+        $('.J_form').append([
+            '<label>',
+                '<input type="checkbox" name="' + item.name + '">',
+                item.label,
+            '</label>',
+        ].join(''));
+
+        // 是否开启检索
+        if (params[item.name] === 'on') {
+            // 自动选中搜索引擎
+            $('input[type=checkbox][name=' + item.name + ']').attr('checked', 'checked');
+
+            // 没有关键字则跳转到默认页面
+            var url = params.keywords ? item[platform].url + params.keywords : item[platform].defaultUrl;
+            $('.J_iframe').append('<iframe id="' + item.name + '" src="' + url + '"></iframe>');
+        }
+    });
+    // 自动填充关键字
+    if (params.keywords) {
+        $('input[name=keywords]').val(params.keywords);
+    }
+
+    // 平台、搜索引擎被更改，自动提交表单
+    $('.J_form input:not([type=text])').change(function() {
+        $('.J_form').submit();
+    });
+
+    // 参数解析
+    function getArgs(){
+        var args = {};
+        var match = null;
+        var search = decodeURIComponent(location.search.substring(1));
+        var reg = /(?:([^&]+)=([^&]+))/g;
+        while((match = reg.exec(search))!==null){
+            args[match[1]] = match[2];
+        }
+        return args;
+    }
+</script>
+</body>
+</html>
