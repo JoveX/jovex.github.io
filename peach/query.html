@@ -86,6 +86,13 @@
 
     var params = getArgs();
 
+    // 第一次进入，默认选中所有搜索引擎
+    if (!location.search) {
+        searchEngineList.forEach(function(item) {
+            params[item.name] = 'on';
+        });
+    }
+
     // 检索平台
     var platform = params.platform || 'pc';
     $('input[name=platform][value=' + platform + ']').attr('checked', 'checked');
