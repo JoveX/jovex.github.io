@@ -4,6 +4,71 @@
     <meta charset="UTF-8">
     <title>query</title>
     <style type="text/css">
+
+        .form-control:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+        }
+        .form-control {
+            padding: 10px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .btn-default {
+            color: #333;
+            background-color: #fff;
+            border-color: #ccc;
+        }
+        .btn-default:hover {
+            color: #333;
+            background-color: #e6e6e6;
+            border-color: #adadad;
+        }
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #286090;
+            border-color: #204d74;
+        }
+        .btn-primary {
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+
         .main {
             -webkit-box-orient: horizontal;
             -moz-box-orient: horizontal;
@@ -13,7 +78,7 @@
             display: box;
 
             position: absolute;
-            top: 50px;
+            top: 60px;
             bottom: 0;
             left: 0;
             right: 0;
@@ -25,29 +90,29 @@
             display: block;
         }
         .keywords {
-            height: 30px;
             width: 300px;
         }
-        .submit, .del_keywords {
-            height: 30px;
-            width: 60px;
+
+        label {
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        label input {
+            margin-right: 5px;
         }
     </style>
 </head>
 <body>
 <form action="" class="J_form">
-    <label>
-        <input type="radio" name="platform" value="pc">
-        PC
-    </label>
-    <label>
-        <input type="radio" name="platform" value="mobile">
-        MOBILE
-    </label>
+    <select name="platform" class="form-control">
+        <option value=""></option>
+        <option value="pc">PC</option>
+        <option value="mobile">MOBILE</option>
+    </select>
     &nbsp;
-    <input type="text" class="keywords" name="keywords" autocomplete="off">
-    <input type="button" class="del_keywords J_delKeywords" value="清空">
-    <input type="submit" class="submit" value="搜索">
+    <input type="text" class="keywords form-control" name="keywords" autocomplete="off">
+    <input type="button" class="J_delKeywords btn btn-default" value="清空">
+    <input type="submit" class="btn btn-primary" value="搜索">
 </form>
 <div class="main J_iframe">
 </div>
@@ -104,13 +169,13 @@
 
     // 检索平台
     var platform = params.platform || 'pc';
-    $('input[name=platform][value=' + platform + ']').attr('checked', 'checked');
+    $('.J_form select').val(platform);
 
     searchEngineList.forEach(function(item) {
         // 搜索引擎选择框
         $('.J_form').append([
             '<label>',
-                '<input type="checkbox" name="' + item.name + '">',
+                '<input class="J_engineName" type="checkbox" name="' + item.name + '">',
                 item.label,
             '</label>',
         ].join(''));
@@ -134,9 +199,12 @@
     }
 
     // 平台、搜索引擎被更改，自动提交表单
-    $('.J_form input:not([type=text])').change(function() {
+    $('.J_form .J_engineName, .J_form select').change(function() {
         $('.J_form').submit();
     });
+    // $('').change(function() {
+    //     $('.J_form').submit();
+    // });
 
     // 删除检索关键字，并让输入框获取焦点
     $('.J_delKeywords').click(function() {
