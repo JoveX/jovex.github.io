@@ -13,7 +13,7 @@
             display: box;
 
             position: absolute;
-            top: 40px;
+            top: 50px;
             bottom: 0;
             left: 0;
             right: 0;
@@ -23,6 +23,14 @@
             -moz-box-flex: 1;
             box-flex: 1;
             display: block;
+        }
+        .keywords {
+            height: 30px;
+            width: 300px;
+        }
+        .submit, .del_keywords {
+            height: 30px;
+            width: 60px;
         }
     </style>
 </head>
@@ -37,8 +45,9 @@
         MOBILE
     </label>
     &nbsp;
-    <input type="text" name="keywords" autocomplete="off">
-    <input type="submit" value="搜索">
+    <input type="text" class="keywords" name="keywords" autocomplete="off">
+    <input type="button" class="del_keywords J_delKeywords" value="清空">
+    <input type="submit" class="submit" value="搜索">
 </form>
 <div class="main J_iframe">
 </div>
@@ -116,14 +125,25 @@
             $('.J_iframe').append('<iframe id="' + item.name + '" src="' + url + '"></iframe>');
         }
     });
+
+    var keywordsDom = $('input[name=keywords]');
+
     // 自动填充关键字
     if (params.keywords) {
-        $('input[name=keywords]').val(params.keywords);
+        keywordsDom.val(params.keywords);
     }
 
     // 平台、搜索引擎被更改，自动提交表单
     $('.J_form input:not([type=text])').change(function() {
         $('.J_form').submit();
+    });
+
+    // 删除检索关键字，并让输入框获取焦点
+    $('.J_delKeywords').click(function() {
+        keywordsDom.val('');
+        var input = keywordsDom.get(0);
+        input.focus();
+        input.select();
     });
 
     // 参数解析
