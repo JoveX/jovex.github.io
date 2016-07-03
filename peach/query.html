@@ -105,7 +105,6 @@
 <body>
 <form action="" class="J_form">
     <select name="platform" class="form-control">
-        <option value=""></option>
         <option value="pc">PC</option>
         <option value="mobile">MOBILE</option>
     </select>
@@ -202,9 +201,6 @@
     $('.J_form .J_engineName, .J_form select').change(function() {
         $('.J_form').submit();
     });
-    // $('').change(function() {
-    //     $('.J_form').submit();
-    // });
 
     // 删除检索关键字，并让输入框获取焦点
     $('.J_delKeywords').click(function() {
