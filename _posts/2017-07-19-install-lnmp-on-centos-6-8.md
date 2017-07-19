@@ -4,6 +4,7 @@ title:  "CentOS6.8安装LNMP"
 date:   2017-07-19 11:30:40
 categories: 
 ---
+
 # CentOS6.8安装LNMP
 ## 要求
 MySQL
@@ -491,6 +492,7 @@ echo phpinfo();
 ```
 
 访问：http://ip:8800/phpinfo.php，看到下面页面，说明配置成功了。
+
 ![](https://ooo.0o0.ooo/2017/07/19/596ed1a8c3c00.jpg)
 
 再新建个文件，测试数据库连接：
@@ -518,6 +520,7 @@ while( $row = mysql_fetch_array($result) ){
 ```
 
 访问：http://ip:8800/index.php，看到下面页面就说明成功了：
+
 ![](https://i.loli.net/2017/07/19/596ed1a8932b2.jpg)
 
 
